@@ -7,13 +7,12 @@ import com.example.demo.boundaries.ProductBoundary;
 
 public interface ShoppingProductService {
 
-	ProductBoundary getSpecificProduct(String productId);
+	public ProductBoundary getSpecificProduct(String productId);
 
-	List<Category> getAllCategories(int size, int page, String sortBy, String sortOrder);
+	public List<Category> getAllCategories(int size, int page, String sortBy, String sortOrder);
 
-	List<ProductBoundary> searchByMinimumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
+	public List<ProductBoundary> searchByMinimumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
 
-	List<ProductBoundary> searchByMaximumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
-
+	public List<ProductBoundary> searchByMaximumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
 
 }

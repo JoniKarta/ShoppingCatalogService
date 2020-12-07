@@ -4,8 +4,10 @@ import java.util.Map;
 
 import javax.persistence.AttributeConverter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+@Component
 public class MapToJsonConverter implements AttributeConverter<Map<String, Object>, String> {
 	private ObjectMapper jackson;
 

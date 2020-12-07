@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.boundaries.Category;
@@ -17,6 +18,7 @@ import com.example.demo.data.ProductConverter;
 import com.example.demo.data.ProductEntity;
 import com.example.demo.exceptions.ProductNotFoundException;
 
+@Service
 public class ShoppingProductServiceMockup implements ShoppingProductService {
 	private ProductDao productDao;
 	private ProductConverter productConverter;

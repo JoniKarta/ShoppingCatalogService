@@ -1,8 +1,11 @@
 package com.example.demo.data;
 
+import org.springframework.stereotype.Component;
+
 import com.example.demo.boundaries.Category;
 import com.example.demo.boundaries.ProductBoundary;
 
+@Component
 public class ProductConverter {
 	public ProductBoundary entityToBoundary(ProductEntity entity) {
 		ProductBoundary boundary = new ProductBoundary(entity.getId().toString(),entity.getName(),entity.getPrice(),

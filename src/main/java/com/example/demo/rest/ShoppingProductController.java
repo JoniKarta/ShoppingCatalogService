@@ -25,8 +25,11 @@ public class ShoppingProductController {
 		this.shoppingProductService = shoppingProductService;
 	}
 	
+
+	
+	
 	@RequestMapping(
-			path = "/products/{productId}",
+			path = "/shopping/products/{productId}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProductBoundary getSpecificProduct(@PathVariable("productId") String productId) {
@@ -34,7 +37,7 @@ public class ShoppingProductController {
 	}
 	
 	@RequestMapping(
-			path = "/categories",
+			path = "/shopping/categories",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Category[] getAllCategories(
@@ -48,7 +51,7 @@ public class ShoppingProductController {
 	
 	
 	@RequestMapping(
-			path = "/products",
+			path = "/shopping/products",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProductBoundary[] searchProduct (
