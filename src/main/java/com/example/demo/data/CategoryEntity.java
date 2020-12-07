@@ -1,5 +1,8 @@
 package com.example.demo.data;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class CategoryEntity {
 	private String name;
 	private String description;

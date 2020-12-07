@@ -2,6 +2,15 @@ package com.example.demo.data;
 
 import java.util.Map;
 
+import javax.persistence.Convert;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "PRODUCTS")
 public class ProductEntity {
 	private Long id;
 	private String name;
@@ -25,6 +34,7 @@ public class ProductEntity {
 		this.category = category;
 	}
 
+	@Id
 	public Long getId() {
 		return id;
 	}
@@ -57,6 +67,8 @@ public class ProductEntity {
 		this.image = image;
 	}
 
+	@Convert(converter = com.example.demo.data.MapToJsonConverter.class)
+	@Lob
 	public Map<String, Object> getProductDetails() {
 		return productDetails;
 	}
@@ -65,6 +77,7 @@ public class ProductEntity {
 		this.productDetails = productDetails;
 	}
 
+	@Embedded
 	public CategoryEntity getCategory() {
 		return category;
 	}
