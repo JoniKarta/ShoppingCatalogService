@@ -2,6 +2,7 @@ package com.example.demo.data;
 
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -43,6 +44,8 @@ public class ProductEntity {
 		this.id = id;
 	}
 
+	// Need to check this (repeated column name error without)
+	@Column(name = "product_name",insertable = false, updatable = false)
 	public String getName() {
 		return name;
 	}

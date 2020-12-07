@@ -15,4 +15,8 @@ public interface ShoppingProductService {
 
 	public List<ProductBoundary> searchByMaximumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
 
+	public Category createCategory(Category category);
+
+	public ProductBoundary createProduct(ProductBoundary category);
+
 }

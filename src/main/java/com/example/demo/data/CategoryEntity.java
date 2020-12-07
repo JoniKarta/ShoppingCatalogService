@@ -1,7 +1,13 @@
 package com.example.demo.data;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+// Need to check: added @Entity, @Table and @Id here
+@Entity
+@Table(name = "CATEGORIES")
 @Embeddable
 public class CategoryEntity {
 	private String name;
@@ -17,6 +23,7 @@ public class CategoryEntity {
 		this.description = description;
 	}
 
+	@Id
 	public String getName() {
 		return name;
 	}

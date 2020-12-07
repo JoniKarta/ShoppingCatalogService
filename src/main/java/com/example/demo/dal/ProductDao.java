@@ -6,14 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.example.demo.data.*;
+import com.example.demo.data.ProductEntity;
 
-
-public interface ProductDao extends PagingAndSortingRepository<ProductEntity, Long>{
+/**
+ * 
+ * @TODO: Fix the methods
+ *
+ */
+public interface ProductDao extends PagingAndSortingRepository<ProductEntity, Long> {
 	
-	public List<ProductEntity> findAllByPriceLessThenEqual(@Param("price") double price, Pageable pageable);
+	public List<ProductEntity> findAllByPriceLessThanEqual(@Param("price") double price, Pageable pageable);
 	
-	public List<ProductEntity> findAllByPriceGreatThenEqual(@Param("price") double price, Pageable pageable);
-
+	public List<ProductEntity> findAllByPriceGreatThanEqual(@Param("price") double price, Pageable pageable);
 
 }
