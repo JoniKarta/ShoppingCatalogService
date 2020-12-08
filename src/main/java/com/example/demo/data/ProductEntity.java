@@ -1,30 +1,28 @@
 package com.example.demo.data;
 
-import java.util.Map;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
 
+/*
 @Entity
-@Table(name = "PRODUCTS")
+@Table(name = "PRODUCTS")*/
+@Node(labels = "PRODUCTS")
 public class ProductEntity {
-	private Long id;
+	@Id private Long id;
 	private String name;
 	private double price;
 	private String image;
-	private CategoryEntity category;
-	private Map<String, Object> productDetails;
+	@Relationship(type = "of", direction = Direction.INCOMING) private CategoryEntity category;
+	private String productDetails;
 
 	public ProductEntity() {
 		super();
 	}
 
-	public ProductEntity(Long id, String name, double price, String image, Map<String, Object> productDetails,
+	public ProductEntity(Long id, String name, double price, String image, String productDetails,
 			CategoryEntity category) {
 		super();
 		this.id = id;
@@ -35,7 +33,7 @@ public class ProductEntity {
 		this.category = category;
 	}
 
-	@Id
+	//@Id
 	public Long getId() {
 		return id;
 	}
@@ -45,7 +43,7 @@ public class ProductEntity {
 	}
 
 	// Need to check this (repeated column name error without)
-	@Column(name = "product_name",insertable = false, updatable = false)
+	//@Column(name = "product_name", insertable = false, updatable = false)
 	public String getName() {
 		return name;
 	}
@@ -70,17 +68,17 @@ public class ProductEntity {
 		this.image = image;
 	}
 
-	@Convert(converter = com.example.demo.data.MapToJsonConverter.class)
-	@Lob
-	public Map<String, Object> getProductDetails() {
+	//@Convert(converter = com.example.demo.data.MapToJsonConverter.class)
+	//@Lob
+	public String getProductDetails() {
 		return productDetails;
 	}
 
-	public void setProductDetails(Map<String, Object> productDetails) {
+	public void setProductDetails(String productDetails) {
 		this.productDetails = productDetails;
 	}
 
-	@Embedded
+	//@Embedded
 	public CategoryEntity getCategory() {
 		return category;
 	}

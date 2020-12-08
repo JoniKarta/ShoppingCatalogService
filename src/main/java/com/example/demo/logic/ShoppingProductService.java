@@ -18,5 +18,5 @@ public interface ShoppingProductService {
 	public Category createCategory(Category category);
 
 	public ProductBoundary createProduct(ProductBoundary category);
-
+	
 }

@@ -1,15 +1,17 @@
 package com.example.demo.data;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
 
 // Need to check: added @Entity, @Table and @Id here
-@Entity
+/*@Entity
 @Table(name = "CATEGORIES")
-@Embeddable
+@Embeddable*/
+
+@Node(labels = "CATEGORIES")
 public class CategoryEntity {
+	@Id @GeneratedValue private Long id;
 	private String name;
 	private String description;
 
@@ -23,7 +25,7 @@ public class CategoryEntity {
 		this.description = description;
 	}
 
-	@Id
+	//@Id
 	public String getName() {
 		return name;
 	}
@@ -38,6 +40,14 @@ public class CategoryEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

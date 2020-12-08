@@ -1,11 +1,8 @@
 package com.example.demo.logic;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.validation.Path.ReturnValueNode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -98,28 +95,9 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 				.stream().map(this.productConverter::entityToBoundary).collect(Collectors.toList());
 	}
 
-	// Kinda overkill since there has to be only one category with the same name
-	// which means the list will have 1 category max.
-	// Two implementations
 	@Override
 	public Category createCategory(Category category) {
-		/*
-		 * List<Category> cateList; int i = 0; if (category != null) { do { cateList =
-		 * this.categoryDao .findAllByName(category.getName(),
-		 * PageRequest.of(i, (i + 1) * 10, Direction.ASC, "name")) .stream()
-		 * .map(this.productConverter::toBoundaryCategory)
-		 * .collect(Collectors.toList());
-		 * 
-		 * for (Category categoryFromDB : cateList) { if
-		 * (categoryFromDB.getName().equalsIgnoreCase(category.getName())) { throw new
-		 * DuplicateCategoryFoundException( "There is existing category with the name: "
-		 * + category.getName()); } } i++; } while (!cateList.isEmpty()); }
-		 * CategoryEntity savedCategory =
-		 * this.categoryDao.save(this.productConverter.toCategoryEntity(category));
-		 * return this.productConverter.toBoundaryCategory(savedCategory);
-		 */
-		
-		Optional<CategoryEntity> categoryEntity = this.categoryDao.findById(category.getName());
+		Optional<CategoryEntity> categoryEntity = this.categoryDao.findOneByName(category.getName());
 		if (categoryEntity.isPresent()) {
 			throw new DuplicateCategoryFoundException("Category with this name already exists");
 		}
@@ -129,18 +107,23 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 
 	@Override
 	public ProductBoundary createProduct(ProductBoundary productBoundary) {
+
 		Optional<ProductEntity> productEntity = this.productDao.findById(Long.parseLong(productBoundary.getId()));
 		if (productEntity.isPresent()) {
 			throw new DuplicateProductFoundException("Product with this ID already exists");
 		}
-
-		Optional<CategoryEntity> categoryEntity = this.categoryDao.findById(productBoundary.getCategory().getName());
-		if (!categoryEntity.isPresent()) {
+		
+		//List<CategoryEntity> categoryEntities = this.categoryDao.findAllByName(productBoundary.getCategory().getName());
+		Optional<CategoryEntity> categoryEntity = this.categoryDao.findOneByName(productBoundary.getCategory().getName());
+		if (!categoryEntity.isPresent()/* categoryEntities.isEmpty() */) {
 			throw new DuplicateCategoryFoundException("Category with this name does not exist");
 		}
-
-		ProductEntity savedProduct = this.productDao.save(this.productConverter.BoundaryToEntity(productBoundary));
+		
+		ProductEntity savedProduct = this.productConverter.BoundaryToEntity(productBoundary);
+		//savedProduct.setCategory(categoryEntities.get(0));
+		savedProduct.setCategory(categoryEntity.get());
+		savedProduct = this.productDao.save(savedProduct);
+	
 		return this.productConverter.entityToBoundary(savedProduct);
 	}
-
 }

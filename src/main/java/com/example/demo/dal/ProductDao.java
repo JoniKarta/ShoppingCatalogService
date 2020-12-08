@@ -19,4 +19,5 @@ public interface ProductDao extends PagingAndSortingRepository<ProductEntity, Lo
 	
 	public List<ProductEntity> findAllByPriceGreaterThanEqual(@Param("price") double price, Pageable pageable);
 
+	//public ProductEntity findByIdLike(@Param("id") long id);
 }
