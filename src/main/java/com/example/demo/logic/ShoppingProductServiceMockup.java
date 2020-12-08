@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.Path.ReturnValueNode;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -47,14 +49,19 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	@Override
 	@Transactional
 	public List<Category> getAllCategories(int size, int page, String sortBy, String sortOrder) {
+		
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
-		List<ProductBoundary> pList = this.productDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
-				.map(this.productConverter::entityToBoundary).collect(Collectors.toList());
-		List<Category> cList = new ArrayList<Category>();
-		for (ProductBoundary p : pList) {
-			cList.add(p.getCategory());
-		}
-		return cList;
+		
+		return this.categoryDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
+				.map(this.productConverter::toBoundaryCategory).collect(Collectors.toList());
+
+//		List<ProductBoundary> pList = this.productDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
+//				.map(this.productConverter::entityToBoundary).collect(Collectors.toList());
+//		List<Category> cList = new ArrayList<Category>();
+//		for (ProductBoundary p : pList) {
+//			cList.add(p.getCategory());
+//		}
+//		return cList;
 	}
 
 	@Override
@@ -73,9 +80,10 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
 
 		return this.productDao
-				.findAllByPriceGreatThanEqual(Double.parseDouble(value),
+				.findAllByPriceGreaterThanEqual(Double.parseDouble(value),
 						PageRequest.of(page, size, direction, sortAttribute))
 				.stream().map(this.productConverter::entityToBoundary).collect(Collectors.toList());
+//		return null;
 	}
 
 	@Override

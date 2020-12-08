@@ -7,7 +7,7 @@ import javax.persistence.AttributeConverter;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-@Component
+
 public class MapToJsonConverter implements AttributeConverter<Map<String, Object>, String> {
 	private ObjectMapper jackson;
 
