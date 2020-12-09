@@ -85,7 +85,6 @@ public class ShoppingProductController {
 			return this.shoppingProductService.searchByCategoryName(filterValue, size, page, sortBy, sortOrder)
 					.toArray(new ProductBoundary[0]);
 		default:
-			// TODO handle filterType
 			return this.shoppingProductService.getAllProducts(filterType, size, page, sortBy, sortOrder)
 					.toArray(new ProductBoundary[0]);	
 		}

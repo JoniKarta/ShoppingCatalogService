@@ -1,21 +1,13 @@
-package com.example.demo.data;
+package com.example.demo.data.converter;
 
 import org.springframework.stereotype.Component;
 
 import com.example.demo.boundaries.Category;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.demo.data.CategoryEntity;
 
-// TODO remove category functionality from product and move to here.
-//@Component
+@Component
 public class CategoryConverter {
-	private ObjectMapper jackson;
-	
-	
-	public CategoryConverter() {
-		jackson = new ObjectMapper();
-	}
-	
-	
+
 	public Category toBoundary(CategoryEntity cEntity) {
 		Category c = new Category(cEntity.getName(), cEntity.getDescription());
 		return c;
@@ -25,9 +17,5 @@ public class CategoryConverter {
 		CategoryEntity c = new CategoryEntity(cBoundary.getName(), cBoundary.getDescription());
 		return c;
 	}
-	
 
-	
-	
-	
 }

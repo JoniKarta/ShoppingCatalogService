@@ -15,18 +15,25 @@ import com.example.demo.boundaries.ProductBoundary;
 import com.example.demo.dal.CategoryDao;
 import com.example.demo.dal.ProductDao;
 import com.example.demo.data.CategoryEntity;
-import com.example.demo.data.ProductConverter;
 import com.example.demo.data.ProductEntity;
+import com.example.demo.data.converter.CategoryConverter;
+import com.example.demo.data.converter.ProductConverter;
 import com.example.demo.exceptions.DuplicateCategoryFoundException;
 import com.example.demo.exceptions.DuplicateProductFoundException;
 import com.example.demo.exceptions.ProductNotFoundException;
 
 @Service
-public class ShoppingProductServiceMockup implements ShoppingProductService {
+public class ShoppingProductServiceWithDb implements ShoppingProductService {
 
 	private ProductDao productDao;
 	private CategoryDao categoryDao;
 	private ProductConverter productConverter;
+	private CategoryConverter categoryConverter;
+
+	@Autowired
+	public void setCategoryConverter(CategoryConverter categoryConverter) {
+		this.categoryConverter = categoryConverter;
+	}
 
 	@Autowired
 	public void setProductDao(ProductDao productDao) {
@@ -50,7 +57,7 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
 
 		return this.categoryDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
-				.map(this.productConverter::toBoundaryCategory).collect(Collectors.toList());
+				.map(this.categoryConverter::toBoundary).collect(Collectors.toList());
 	}
 
 	@Override
@@ -64,11 +71,11 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ProductBoundary> searchByProductName(String filterValue, int size, int page, String sortBy, String sortOrder) {
+	public List<ProductBoundary> searchByProductName(String filterValue, int size, int page, String sortBy,
+			String sortOrder) {
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
 		return this.productDao.findAllByNameLikeIgnoreCase(filterValue, PageRequest.of(page, size, direction, sortBy))
-				.stream()
-				.map(this.productConverter::entityToBoundary).collect(Collectors.toList());
+				.stream().map(this.productConverter::entityToBoundary).collect(Collectors.toList());
 
 	}
 
@@ -87,9 +94,7 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	@Transactional(readOnly = true)
 	public List<ProductBoundary> searchByMaximumPrice(String value, int size, int page, String sortAttribute,
 			String sortOrder) {
-
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
-
 		return this.productDao
 				.findAllByPriceLessThanEqual(Double.parseDouble(value),
 						PageRequest.of(page, size, direction, sortAttribute))
@@ -103,8 +108,8 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 		if (categoryEntity.isPresent()) {
 			throw new DuplicateCategoryFoundException("Category with this name already exists");
 		}
-		CategoryEntity savedCategory = this.categoryDao.save(this.productConverter.toCategoryEntity(category));
-		return this.productConverter.toBoundaryCategory(savedCategory);
+		CategoryEntity savedCategory = this.categoryDao.save(this.categoryConverter.toEntity(category));
+		return this.categoryConverter.toBoundary(savedCategory);
 	}
 
 	@Override
@@ -149,10 +154,10 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public void delete() {
-		this.categoryDao.deleteAll();
 		this.productDao.deleteAll();
+		this.categoryDao.deleteAll();
 	}
 
 }

@@ -4,7 +4,6 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
-
 @Node(labels = "CATEGORIES")
 public class CategoryEntity {
 	@Id @GeneratedValue private Long id;
@@ -21,7 +20,6 @@ public class CategoryEntity {
 		this.description = description;
 	}
 
-	//@Id
 	public String getName() {
 		return name;
 	}
