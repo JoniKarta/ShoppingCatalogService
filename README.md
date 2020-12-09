@@ -19,7 +19,7 @@ Product Microservice API:
 		<tr>
 			<td><b>GET</b></td>
 			<td> /shopping/products/{productId} </td>
-			<td>An action that returns a particular product according to its catalog number. If there is no such product in the system, the operation will return 					error code 404</td>
+			<td>An action that returns a particular product according to its catalog number. If there is no such product in the system, the operation will return 					error code 404.</td>
 		</tr>
 		<tr>
 			<td><b><b>GET</b></b></td>
@@ -57,7 +57,7 @@ Product Microservice API:
 			<td>/shopping/products</td>
 			<td>An action that receives details of a new product, which already includes a catalog number defined by the service operators and stores it.
 				If a product with the same catalog number already exists, the service will return an error code of 500.
-				When creating a product, the category defined for it must exist in the system. Otherwise, an error code of 500 will be returned</td>
+				When creating a product, the category defined for it must exist in the system. Otherwise, an error code of 500 will be returned.</td>
 		</tr>
     <tr>
 			<td><b>DELETE</b></td>
