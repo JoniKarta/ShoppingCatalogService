@@ -49,7 +49,8 @@ Product Microservice API:
     <tr>
 			<td><b>POST</b></td>
 			<td>/shopping/categories</td>
-			<td></td>
+			<td>An action that receives category information of products, and stores it in the system.
+				If a category with this name already exists, the operation will return error code 500.</td>
 		</tr>   
     <tr>
 			<td><b>POST</b></td>
@@ -59,7 +60,7 @@ Product Microservice API:
     <tr>
 			<td><b>DELETE</b></td>
 			<td>/shopping</td>
-			<td></td>
+			<td>An action that deletes all the products and categories that the service manages and returns nothing.</td>
 		</tr>
 
 </table>
