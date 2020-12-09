@@ -41,49 +41,60 @@ public class ShoppingProductController {
 		return this.shoppingProductService.createProduct(product);
 	}
 	
-	@RequestMapping(path = "/shopping/products/{productId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ProductBoundary getSpecificProduct(@PathVariable("productId") String productId) {
-		return this.shoppingProductService.getSpecificProduct(productId);
-	}
-
-	@RequestMapping(path = "/shopping/categories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/shopping/categories", 
+			method = RequestMethod.GET, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Category[] getAllCategories(
 			@RequestParam(name = "sortBy", required = false, defaultValue = "name") String sortBy,
 			@RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "10") int size) {
-
 		return this.shoppingProductService.getAllCategories(size, page, sortBy, sortOrder).toArray(new Category[0]);
 	}
 
+	
+	@RequestMapping(path = "/shopping/products/{productId}",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ProductBoundary getSpecificProduct(@PathVariable("productId") String productId) {
+		return this.shoppingProductService.getSpecificProduct(productId);
+	}
+
+	
+	
 	@RequestMapping(path = "/shopping/products", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProductBoundary[] searchProduct(
-			@RequestParam(name = "filterType", required = false, defaultValue = "") String type,
-			@RequestParam(name = "filterValue", required = false) String value,
+			@RequestParam(name = "filterType", required = false, defaultValue = "") String filterType,
+			@RequestParam(name = "filterValue", required = false) String filterValue,
 			@RequestParam(name = "size", required = false, defaultValue = "10") int size,
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-			@RequestParam(name = "sortBy", required = false, defaultValue = "name") String sortAttribute,
+			@RequestParam(name = "sortBy", required = false, defaultValue = "name") String sortBy,
 			@RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder) {
 
-		switch (type) {
+		switch (filterType) {
 		case ControllerTypes.BY_NAME:
-			break;
-
+			return this.shoppingProductService.searchByProductName(filterValue, size, page, sortBy, sortOrder)
+			.toArray(new ProductBoundary[0]);
 		case ControllerTypes.BY_MINIMUM_PRICE:
-			return this.shoppingProductService.searchByMinimumPrice(value, size, page, sortAttribute, sortOrder)
+			return this.shoppingProductService.searchByMinimumPrice(filterValue, size, page, sortBy, sortOrder)
 					.toArray(new ProductBoundary[0]);
-
 		case ControllerTypes.BY_MAXIMUM_PRICE:
-			return this.shoppingProductService.searchByMaximumPrice(value, size, page, sortAttribute, sortOrder)
+			return this.shoppingProductService.searchByMaximumPrice(filterValue, size, page, sortBy, sortOrder)
 					.toArray(new ProductBoundary[0]);
-
 		case ControllerTypes.BY_CATEGORY_NAME:
-			break;
+			return this.shoppingProductService.searchByCategoryName(filterValue, size, page, sortBy, sortOrder)
+					.toArray(new ProductBoundary[0]);
 		default:
-			break;
+			// TODO handle filterType
+			return this.shoppingProductService.getAllProducts(filterType, size, page, sortBy, sortOrder)
+					.toArray(new ProductBoundary[0]);	
 		}
-
-		return null;
-
 	}
+	
+	
+	@RequestMapping(path = "/shopping/products", method = RequestMethod.DELETE)
+	public void delete() {
+		this.shoppingProductService.delete();
+	}
+	
 }

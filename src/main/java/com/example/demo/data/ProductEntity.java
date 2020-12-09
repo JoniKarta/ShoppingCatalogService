@@ -5,17 +5,13 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
-
-/*
-@Entity
-@Table(name = "PRODUCTS")*/
 @Node(labels = "PRODUCTS")
 public class ProductEntity {
 	@Id private Long id;
 	private String name;
 	private double price;
 	private String image;
-	@Relationship(type = "of", direction = Direction.INCOMING) private CategoryEntity category;
+	@Relationship(type = "labled_as", direction = Direction.OUTGOING) private CategoryEntity category;
 	private String productDetails;
 
 	public ProductEntity() {
@@ -33,7 +29,6 @@ public class ProductEntity {
 		this.category = category;
 	}
 
-	//@Id
 	public Long getId() {
 		return id;
 	}
@@ -42,8 +37,6 @@ public class ProductEntity {
 		this.id = id;
 	}
 
-	// Need to check this (repeated column name error without)
-	//@Column(name = "product_name", insertable = false, updatable = false)
 	public String getName() {
 		return name;
 	}
@@ -68,8 +61,7 @@ public class ProductEntity {
 		this.image = image;
 	}
 
-	//@Convert(converter = com.example.demo.data.MapToJsonConverter.class)
-	//@Lob
+
 	public String getProductDetails() {
 		return productDetails;
 	}
@@ -78,7 +70,6 @@ public class ProductEntity {
 		this.productDetails = productDetails;
 	}
 
-	//@Embedded
 	public CategoryEntity getCategory() {
 		return category;
 	}

@@ -4,10 +4,6 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
-// Need to check: added @Entity, @Table and @Id here
-/*@Entity
-@Table(name = "CATEGORIES")
-@Embeddable*/
 
 @Node(labels = "CATEGORIES")
 public class CategoryEntity {

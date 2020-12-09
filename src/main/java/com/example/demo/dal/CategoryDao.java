@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.data.CategoryEntity;
 
-// Method not being used for now (using default findById), need to check
 public interface CategoryDao extends PagingAndSortingRepository<CategoryEntity, Long> {
 	public List<CategoryEntity> findAllByName(@Param("name") String name, Pageable pageable);
 

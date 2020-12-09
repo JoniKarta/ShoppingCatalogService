@@ -25,7 +25,7 @@ public class ProductConverter {
 		return boundary;
 	}
 
-	public ProductEntity BoundaryToEntity(ProductBoundary boundary) {
+	public ProductEntity boundaryToEntity(ProductBoundary boundary) {
 		ProductEntity entity = new ProductEntity(Long.parseLong(boundary.getId()), boundary.getName(),
 				boundary.getPrice(), boundary.getImage(), marshElementAttribute(boundary.getProductDetails()),
 				toCategoryEntity(boundary.getCategory()));

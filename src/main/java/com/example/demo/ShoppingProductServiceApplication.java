@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ShoppingProductServiceApplication {
 
-	//check
+	// check
 	public static void main(String[] args) {
 		SpringApplication.run(ShoppingProductServiceApplication.class, args);
 	}

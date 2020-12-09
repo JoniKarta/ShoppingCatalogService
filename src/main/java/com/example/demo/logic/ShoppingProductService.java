@@ -11,12 +11,24 @@ public interface ShoppingProductService {
 
 	public List<Category> getAllCategories(int size, int page, String sortBy, String sortOrder);
 
-	public List<ProductBoundary> searchByMinimumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
+	public List<ProductBoundary> searchByProductName(String filterValue, int size, int page, String sortBy, String sortOrder);
 
-	public List<ProductBoundary> searchByMaximumPrice(String value, int size, int page, String sortAttribute, String sortOrder);
+	public List<ProductBoundary> searchByMinimumPrice(String filterValue, int size, int page, String sortBy, String sortOrder);
+
+	public List<ProductBoundary> searchByMaximumPrice(String filterValue, int size, int page, String sortBy, String sortOrder);
+
+	public List<ProductBoundary> searchByCategoryName(String filterValue, int size, int page, String sortBy, String sortOrder);
+
+	public List<ProductBoundary> getAllProducts(String filterValue, int size, int page, String sortBy, String sortOrder);
 
 	public Category createCategory(Category category);
 
 	public ProductBoundary createProduct(ProductBoundary category);
+
+	public void delete();
+
+
+
+
 	
 }

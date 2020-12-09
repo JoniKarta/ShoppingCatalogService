@@ -23,7 +23,7 @@ import com.example.demo.exceptions.ProductNotFoundException;
 
 @Service
 public class ShoppingProductServiceMockup implements ShoppingProductService {
-	
+
 	private ProductDao productDao;
 	private CategoryDao categoryDao;
 	private ProductConverter productConverter;
@@ -44,25 +44,17 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Category> getAllCategories(int size, int page, String sortBy, String sortOrder) {
-		
+
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
-		
+
 		return this.categoryDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
 				.map(this.productConverter::toBoundaryCategory).collect(Collectors.toList());
-
-//		List<ProductBoundary> pList = this.productDao.findAll(PageRequest.of(page, size, direction, sortBy)).stream()
-//				.map(this.productConverter::entityToBoundary).collect(Collectors.toList());
-//		List<Category> cList = new ArrayList<Category>();
-//		for (ProductBoundary p : pList) {
-//			cList.add(p.getCategory());
-//		}
-//		return cList;
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public ProductBoundary getSpecificProduct(String productId) {
 		Optional<ProductEntity> productFromDB = this.productDao.findById(Long.parseLong(productId));
 		if (productFromDB.isPresent())
@@ -71,19 +63,28 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<ProductBoundary> searchByProductName(String filterValue, int size, int page, String sortBy, String sortOrder) {
+		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
+		return this.productDao.findAllByNameLikeIgnoreCase(filterValue, PageRequest.of(page, size, direction, sortBy))
+				.stream()
+				.map(this.productConverter::entityToBoundary).collect(Collectors.toList());
+
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<ProductBoundary> searchByMinimumPrice(String value, int size, int page, String sortAttribute,
 			String sortOrder) {
-
 		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
-
 		return this.productDao
 				.findAllByPriceGreaterThanEqual(Double.parseDouble(value),
 						PageRequest.of(page, size, direction, sortAttribute))
 				.stream().map(this.productConverter::entityToBoundary).collect(Collectors.toList());
-//		return null;
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ProductBoundary> searchByMaximumPrice(String value, int size, int page, String sortAttribute,
 			String sortOrder) {
 
@@ -96,6 +97,7 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	}
 
 	@Override
+	@Transactional
 	public Category createCategory(Category category) {
 		Optional<CategoryEntity> categoryEntity = this.categoryDao.findOneByName(category.getName());
 		if (categoryEntity.isPresent()) {
@@ -106,24 +108,51 @@ public class ShoppingProductServiceMockup implements ShoppingProductService {
 	}
 
 	@Override
+	@Transactional
 	public ProductBoundary createProduct(ProductBoundary productBoundary) {
 
 		Optional<ProductEntity> productEntity = this.productDao.findById(Long.parseLong(productBoundary.getId()));
 		if (productEntity.isPresent()) {
 			throw new DuplicateProductFoundException("Product with this ID already exists");
 		}
-		
-		//List<CategoryEntity> categoryEntities = this.categoryDao.findAllByName(productBoundary.getCategory().getName());
-		Optional<CategoryEntity> categoryEntity = this.categoryDao.findOneByName(productBoundary.getCategory().getName());
-		if (!categoryEntity.isPresent()/* categoryEntities.isEmpty() */) {
+		Optional<CategoryEntity> categoryEntity = this.categoryDao
+				.findOneByName(productBoundary.getCategory().getName());
+		if (!categoryEntity.isPresent()) {
 			throw new DuplicateCategoryFoundException("Category with this name does not exist");
 		}
-		
-		ProductEntity savedProduct = this.productConverter.BoundaryToEntity(productBoundary);
-		//savedProduct.setCategory(categoryEntities.get(0));
+
+		ProductEntity savedProduct = this.productConverter.boundaryToEntity(productBoundary);
 		savedProduct.setCategory(categoryEntity.get());
 		savedProduct = this.productDao.save(savedProduct);
-	
+
 		return this.productConverter.entityToBoundary(savedProduct);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<ProductBoundary> getAllProducts(String filterValue, int size, int page, String sortBy,
+			String sortOrder) {
+		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
+
+		return this.productDao.findAll(PageRequest.of(page, size, direction, sortBy)).getContent().stream()
+				.map(this.productConverter::entityToBoundary).collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<ProductBoundary> searchByCategoryName(String filterValue, int size, int page, String sortBy,
+			String sortOrder) {
+		Direction direction = sortOrder.equals(Direction.ASC.toString()) ? Direction.ASC : Direction.DESC;
+		return this.productDao.findAllByCategory_name(filterValue, PageRequest.of(page, size, direction, sortBy))
+				.stream().map(this.productConverter::entityToBoundary).collect(Collectors.toList());
+
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public void delete() {
+		this.categoryDao.deleteAll();
+		this.productDao.deleteAll();
+	}
+
 }

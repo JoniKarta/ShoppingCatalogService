@@ -8,16 +8,14 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.data.ProductEntity;
 
-/**
- * 
- * @TODO: Fix the methods
- *
- */
 public interface ProductDao extends PagingAndSortingRepository<ProductEntity, Long> {
 	
 	public List<ProductEntity> findAllByPriceLessThanEqual(@Param("price") double price, Pageable pageable);
 	
 	public List<ProductEntity> findAllByPriceGreaterThanEqual(@Param("price") double price, Pageable pageable);
+	
+    public List<ProductEntity> findAllByNameLikeIgnoreCase(@Param("name") String name, Pageable pageable);
 
-	//public ProductEntity findByIdLike(@Param("id") long id);
+    // TODO need to improve the performance using set 
+	public List<ProductEntity> findAllByCategory_name(@Param("name") String productName, Pageable pageable);
 }
